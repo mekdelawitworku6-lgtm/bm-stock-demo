@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "109507036406",
+    "project_id": "bmstock-bc004",
+    "storage_bucket": "bmstock-bc004.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:109507036406:android:ed7cdda39ebccec1fc98d7",
+        "android_client_info": {
+          "package_name": "com.bmstock2.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzTsr7j-KODQkh5ouajc5BFnSsUKK3Ywo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,1 @@
+{"success":false,"message":"Forbidden resource","timestamp":"2025-10-16T10:50:27.061Z","path":"/api/v1/reports/sales?format=pdf&startDate=2025-10-01&endDate=2025-10-31","method":"GET"}

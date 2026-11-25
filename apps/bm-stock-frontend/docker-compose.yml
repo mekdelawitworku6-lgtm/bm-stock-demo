@@ -1,0 +1,25 @@
+services:
+  bm-stock-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: /api/v1
+        BACKEND_URL: http://app:3000
+    container_name: bm-stock-frontend
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=production
+      - PORT=3002
+      - NEXT_PUBLIC_API_URL=/api/v1
+      - BACKEND_URL=http://app:3000
+    networks:
+      - nestjs-network
+    restart: always
+
+networks:
+  nestjs-network:
+    external: true
+    name: inventory-backend_nestjs-network
+

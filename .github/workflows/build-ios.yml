@@ -1,0 +1,64 @@
+name: Build iOS IPA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-ios:
+    name: Build iOS App
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Get Flutter dependencies
+        run: |
+          cd apps/bm-stock-flutter-app
+          flutter pub get
+
+      - name: Pre-create Build Directories and Run Pod Install
+        run: |
+          cd apps/bm-stock-flutter-app
+          mkdir -p build/ios/SourcePackages
+          cd ios
+          pod install
+
+      - name: Build iOS IPA (No Codesign)
+        run: |
+          cd apps/bm-stock-flutter-app
+          flutter build ipa --no-codesign --dart-define=BASE_URL=https://bmstock.possibletechplc.com/api/v1
+
+      - name: Package IPA
+        run: |
+          cd apps/bm-stock-flutter-app
+          if [ -d "build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app" ]; then
+            cd build/ios/archive/Runner.xcarchive/Products/Applications
+            mkdir -p Payload
+            cp -r Runner.app Payload/
+            zip -r BM-Stock.ipa Payload
+          else
+            echo "Searching for Runner.app..."
+            find build -name "Runner.app"
+          fi
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bm-stock-ios-ipa
+          path: |
+            apps/bm-stock-flutter-app/build/ios/archive/Runner.xcarchive/Products/Applications/BM-Stock.ipa
+            apps/bm-stock-flutter-app/build/ios/ipa/*.ipa

@@ -1,0 +1,87 @@
+services:
+  app:
+    image: bm-stock
+    container_name: bm-stock
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+      - OTP_DEV_MODE=false
+      - DB_HOST=postgres
+      - DB_SYNCHRONIZE=true
+      - REDIS_HOST=redis
+      - GEEZSMS_TOKEN=${GEEZSMS_TOKEN:-iRdmmzzqzhEwp4bd3ILigG6emcwHDtp7}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    volumes:
+      - ./logs:/app/logs
+      - ./uploads:/app/uploads
+    networks:
+      - nestjs-network
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15
+    container_name: bm-stock-postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME:-gelagle-stock-ims}
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - '${DB_PORT:-5432}:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - nestjs-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_NAME:-gelagle-stock-ims}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  redis:
+    image: redis:7-alpine
+    container_name: bm-stock-redis
+    ports:
+      - '${REDIS_PORT:-6379}:6379'
+    volumes:
+      - redis_data:/data
+    networks:
+      - nestjs-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+#  nginx:
+#    image: nginx:alpine
+#    ports:
+#      - '80:80'
+#      - '443:443'
+#    volumes:
+#      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+#    depends_on:
+#      - app
+#    networks:
+#      - nestjs-network
+#    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  nestjs-network:
+    external: true
+    name: inventory-backend_nestjs-network

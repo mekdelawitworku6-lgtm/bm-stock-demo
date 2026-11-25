@@ -1,0 +1,25 @@
+services:
+  bm-stock-admin-portal:
+    image: bm-stock-admin
+    container_name: bm-stock-admin
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BACKEND_URL: http://app:3000
+        NEXT_PUBLIC_API_URL: /api/v1
+    ports:
+      - '3011:3001'
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - BACKEND_URL=http://app:3000
+      - NEXT_PUBLIC_API_URL=/api/v1
+    networks:
+      - nestjs-network
+    restart: unless-stopped
+
+networks:
+  nestjs-network:
+    external: true
+    name: inventory-backend_nestjs-network

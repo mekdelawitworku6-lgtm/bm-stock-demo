@@ -1,0 +1,70 @@
+{
+  "expo": {
+    "name": "Gelagle Stock",
+    "slug": "inventory-app",
+    "version": "1.0.0",
+    "entryPoint": "index.js",
+    "orientation": "portrait",
+    "icon": "./assets/images/Logo/icon.png",
+    "scheme": "inventoryapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/Logo/icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gem-chu.inventoryapp",
+      "icon": "./assets/images/Logo/icon.png",
+      "infoPlist": {
+        "UIBackgroundModes": ["remote-notification"]
+      }
+    },
+    "android": {
+      "icon": "./assets/images/Logo/icon.png",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/Logo/icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.gem_chu.inventoryapp",
+      "versionCode": 1,
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "USE_BIOMETRIC",
+        "USE_FINGERPRINT"
+      ]
+    },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/Logo/icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 35,
+            "targetSdkVersion": 35,
+            "buildToolsVersion": "35.0.0"
+          }
+        }
+      ]
+    ],
+    "experiments": {},
+    "extra": {
+      "eas": {
+        "projectId": "82d98a69-5cfc-47f2-8052-66e2ab48cd28"
+      }
+    }
+  }
+}
